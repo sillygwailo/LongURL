@@ -22,6 +22,9 @@ class longURL {
     $format = empty($options['format']) ? 'php' : $options['format']; // if $format is not set in the options array, set it to 'php'
     unset($options['format']);
     
+    $user_agent = empty($options['user-agent']) ? "LongURL-PHP-Client-Library/0.1" : $options['user-agent'];
+    unset($options['user-agent']);
+    
     // construct the query
     $queries = array(
       'url' => $shorturl,
@@ -35,12 +38,13 @@ class longURL {
   	$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $longurl_api);
   	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  	curl_setopt($ch, CURLOPT_USERAGENT, $user_agent); 
   	curl_exec($ch);
 		$longurl = new StdClass();
 	  $longurl->headers = curl_getinfo($ch); // can be used to debug, especially useful for HTTP codes, documented at http://longurl.org/api#error-responses
 	  $longurl->content = unserialize(curl_multi_getcontent($ch));
 	  $longurl->longurl = $longurl->content['long-url'];
-   return $longurl;
+    return $longurl;
   }
   
   static function services() {
