@@ -10,7 +10,7 @@ class longURL {
     if (empty($options['format'])) {
       $options['format'] = 'php';
     }
-    $options['user_agent'] = empty($options['user-agent']) ? "LongURL-PHP-Client-Library/0.1" : $options['user-agent'];
+    $options['user-agent'] = empty($options['user-agent']) ? "LongURL-PHP-Client-Library/0.1" : $options['user-agent'];
 
     // construct the query
     $queries = array();
@@ -24,7 +24,7 @@ class longURL {
     $ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
   	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  	curl_setopt($ch, CURLOPT_USERAGENT, $options['user_agent']); 
+  	curl_setopt($ch, CURLOPT_USERAGENT, $options['user-agent']); 
   	curl_exec($ch);
   	$longurl_return = array();
   	$longurl_return['headers'] = curl_getinfo($ch);
@@ -67,7 +67,7 @@ class longURL {
 	  $longurl_call = $this->longurl_api($longurl_api_url, $options);
 	  $longurl->headers = $longurl_call['headers'];
 	  $longurl->content = $longurl_call['content'];
-	  $longurl->services = array_keys($longurl_call['content']);
+	  $longurl->services = array_keys($longurl_call['content']) ;
     return $longurl;
   }
 }
