@@ -1,11 +1,11 @@
 <?php
 
 class longURL {
-  
+
   function __construct() {
   // set the user agent here. To be used in the curl_setopt() fuctions
   }
-  
+
   protected function longurl_api($url, $options = array()) {
     if (empty($options['format'])) {
       $options['format'] = 'php';
@@ -22,18 +22,20 @@ class longURL {
     $url .= '?' . $query;
 
     $ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-  	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  	curl_setopt($ch, CURLOPT_USERAGENT, $options['user-agent']); 
-  	curl_exec($ch);
-  	$longurl_return = array();
-  	$longurl_return['headers'] = curl_getinfo($ch);
-  	$content = curl_multi_getcontent($ch);
-  	if ($options['format'] == 'php') {
-  	  $longurl_return['content'] = unserialize($content);
-  	}
-  	else { $longurl_return['content'] = $content; }
-  	return $longurl_return;
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_USERAGENT, $options['user-agent']); 
+    curl_exec($ch);
+    $longurl_return = array();
+    $longurl_return['headers'] = curl_getinfo($ch);
+    $content = curl_multi_getcontent($ch);
+    if ($options['format'] == 'php') {
+      $longurl_return['content'] = unserialize($content);
+    }
+    else { 
+      $longurl_return['content'] = $content; 
+    }
+    return $longurl_return;
   }
 
   public function expand($shorturl, $options = array()) {
@@ -51,23 +53,23 @@ class longURL {
     */
 
     // construct the URL for the API call
-	  $longurl_api_url =  "http://api.longurl.org/v2/expand";
-	  $options['url'] = $shorturl;
-		$longurl = new StdClass();
-		$longurl_call = $this->longurl_api($longurl_api_url, $options);
-	  $longurl->headers = $longurl_call['headers']; // can be used to debug, especially useful for HTTP codes, documented at http://longurl.org/api#error-responses
-	  $longurl->content = $longurl_call['content'];
-	  $longurl->longurl = $longurl->content['long-url'];
+    $longurl_api_url =  "http://api.longurl.org/v2/expand";
+    $options['url'] = $shorturl;
+    $longurl = new StdClass();
+    $longurl_call = $this->longurl_api($longurl_api_url, $options);
+    $longurl->headers = $longurl_call['headers']; // can be used to debug, especially useful for HTTP codes, documented at http://longurl.org/api#error-responses
+    $longurl->content = $longurl_call['content'];
+    $longurl->longurl = $longurl->content['long-url'];
     return $longurl;
   }
 
   public function services($options = array()) {
-		$longurl = new StdClass();
-	  $longurl_api_url = "http://api.longurl.org/v2/services";
-	  $longurl_call = $this->longurl_api($longurl_api_url, $options);
-	  $longurl->headers = $longurl_call['headers'];
-	  $longurl->content = $longurl_call['content'];
-	  $longurl->services = array_keys($longurl_call['content']) ;
+    $longurl = new StdClass();
+    $longurl_api_url = "http://api.longurl.org/v2/services";
+    $longurl_call = $this->longurl_api($longurl_api_url, $options);
+    $longurl->headers = $longurl_call['headers'];
+    $longurl->content = $longurl_call['content'];
+    $longurl->services = array_keys($longurl_call['content']);
     return $longurl;
   }
 }
