@@ -3,7 +3,6 @@
 class longURL {
 
   function __construct() {
-  // set the user agent here. To be used in the curl_setopt() fuctions
   }
 
   protected function longurl_api($url, $options = array()) {
@@ -75,7 +74,7 @@ class longURL {
     $options['url'] = $shorturl;
     $longurl = new StdClass();
     $longurl_call = $this->longurl_api($longurl_api_url, $options);
-    $longurl->headers = $longurl_call['headers']; // can be used to debug, especially useful for HTTP codes, documented at http://longurl.org/api#error-responses
+    $longurl->headers = $longurl_call['headers'];
     $longurl->content = $longurl_call['content'];
     $longurl->longurl = $longurl->content['long-url'];
     return $longurl;
